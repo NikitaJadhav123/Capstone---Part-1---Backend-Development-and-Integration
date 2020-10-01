@@ -33,9 +33,9 @@ public class JwtTokenProvider {
     secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
   }
 
-  public String createToken(String emailId) {
+  public String createToken(String usernm) {
 
-    Claims claims = Jwts.claims().setSubject(emailId);
+    Claims claims = Jwts.claims().setSubject(usernm);
 
     Date now = new Date();
     Date validity = new Date(now.getTime() + validityInMilliseconds);
@@ -50,11 +50,11 @@ public class JwtTokenProvider {
 
   public Authentication getAuthentication(String token) throws UserDetailsNotfoundException {
 
-    UserDetails userDetails = this.userService.loadCustomerDetails(getEmail(token));
+    UserDetails userDetails = this.userService.loadCustomerDetails(getUsernm(token));
     return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
   }
 
-  public String getEmail(String token) {
+  public String getUsernm(String token) {
     return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
   }
 

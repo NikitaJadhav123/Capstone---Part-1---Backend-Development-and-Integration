@@ -72,9 +72,9 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDetails loadCustomerDetails(String email) throws UserDetailsNotfoundException {
-        EshopUser user = usersDAO.findByEmail(email).orElseThrow(
-                ()->  new UserDetailsNotfoundException("User not found for " + email));
+    public UserDetails loadCustomerDetails(String un) throws UserDetailsNotfoundException {
+        EshopUser user = usersDAO.findByUserName(un).orElseThrow(
+                ()->  new UserDetailsNotfoundException("User not found for " + un));
 
         return  new User(user.getEmail(), user.getPassword() , new ArrayList<>());
 
