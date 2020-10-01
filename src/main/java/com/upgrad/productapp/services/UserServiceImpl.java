@@ -63,6 +63,12 @@ public class UserServiceImpl implements UserService {
         return customer;
     }
 
+    public EshopUser getCustomerDetailsById(int id) throws UserDetailsNotfoundException {
+        EshopUser customer = usersDAO.findById(id).orElseThrow(
+                ()->  new UserDetailsNotfoundException("User not found for id" + id));
+        return customer;
+    }
+
    public EshopUser getCustomerDetailsByUserName(String un) throws UserDetailsNotfoundException {
         EshopUser customer = usersDAO.findByUserName(un).orElseThrow(
                 ()->  new UserDetailsNotfoundException("User not found for " + un));
