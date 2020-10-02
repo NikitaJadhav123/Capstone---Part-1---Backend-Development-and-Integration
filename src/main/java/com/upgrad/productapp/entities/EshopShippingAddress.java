@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Getter
@@ -38,6 +39,8 @@ public class EshopShippingAddress {
     @ManyToOne  //FOREIGN KEY
    private EshopUser user; // number NOT NULL,
 
+    @OneToMany(mappedBy = "eshopShippingAddress" , fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private List<EshopOrder> orders;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

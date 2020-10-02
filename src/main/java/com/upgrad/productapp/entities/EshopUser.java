@@ -51,6 +51,11 @@ public class EshopUser {
     @OneToMany(mappedBy = "user" , fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<EshopShippingAddress> eshopShippingAddresses;
 
+
+    @OneToMany(mappedBy = "eshopUser" , fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private List<EshopOrder> orders;
+
+
     public EshopUser(){
 
     }

@@ -1,12 +1,12 @@
 package com.upgrad.productapp.utils;
 
+import com.upgrad.productapp.dtos.EshopProductDto;
 import com.upgrad.productapp.dtos.EshopShippingAddressDto;
 import com.upgrad.productapp.dtos.EshopUserDto;
 import com.upgrad.productapp.dtos.LoginDTO;
+import com.upgrad.productapp.entities.EshopProduct;
 import com.upgrad.productapp.entities.EshopShippingAddress;
 import com.upgrad.productapp.entities.EshopUser;
-import com.upgrad.productapp.exceptions.UserAlreadyExistsException;
-import com.upgrad.productapp.exceptions.UserDetailsNotfoundException;
 import com.upgrad.productapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,7 +44,7 @@ public class EntityDTOConverter {
         return customerDTO;
     }
 
-    public EshopShippingAddressDto convertToAddressSto(EshopShippingAddress address) throws UserDetailsNotfoundException, UserAlreadyExistsException {
+    public EshopShippingAddressDto convertToAddressSto(EshopShippingAddress address){
         EshopShippingAddressDto addressDto= new EshopShippingAddressDto();
         addressDto.setCity(address.getCity());
         addressDto.setLandmark(address.getLandmark());
@@ -56,6 +56,25 @@ public class EntityDTOConverter {
         addressDto.setUser(address.getUser());
         return addressDto;
     }
+
+    public EshopProductDto convertToProductDto(EshopProduct product)  {
+        EshopProductDto productDto= new EshopProductDto();
+        productDto.setAvailableItems(product.getAvailable_items());
+        productDto.setCategory(product.getCategory());
+        productDto.setDescription(product.getDescription());
+        productDto.setImageUrl(product.getImage_url());
+        productDto.setManufacturer(product.getManufacturer());
+        productDto.setName(product.getName());
+        productDto.setPrice(product.getPrice());
+       productDto.setCreated(product.getCreated());
+       productDto.setUpdated(product.getUpdated());
+        return productDto;
+    }
+
+
+
+
+
 
 
 }

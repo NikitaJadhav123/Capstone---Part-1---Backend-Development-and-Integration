@@ -8,5 +8,4 @@ import org.springframework.stereotype.Repository;
 @Repository("eshopShippingDAO")
 public interface EshopShippingAddressDAO extends JpaRepository<EshopShippingAddress,Integer> {
 
-        //  Optional<Users> findByEmailIdandPassword(String emailId,String password);
 }
