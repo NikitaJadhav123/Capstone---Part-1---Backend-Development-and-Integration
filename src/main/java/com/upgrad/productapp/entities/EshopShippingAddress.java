@@ -45,4 +45,21 @@ public class EshopShippingAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
    private int id; // number PRIMARY KEY,
+
+
+    public EshopShippingAddress(){
+
+    }
+
+
+    public EshopShippingAddress(String city, String landmark, String name, String phone, String state, String street, String zipcode, EshopUser user) {
+        this.city = city;
+        this.landmark = landmark;
+        this.name = name;
+        this.phone = phone;
+        this.state = state;
+        this.street = street;
+        this.zipcode = zipcode;
+        this.user=user;
+    }
 }

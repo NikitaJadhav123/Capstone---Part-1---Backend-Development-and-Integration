@@ -1,15 +1,15 @@
 package com.upgrad.productapp.utils;
 
-import com.upgrad.productapp.dtos.EshopProductDto;
-import com.upgrad.productapp.dtos.EshopShippingAddressDto;
-import com.upgrad.productapp.dtos.EshopUserDto;
-import com.upgrad.productapp.dtos.LoginDTO;
+import com.upgrad.productapp.dtos.*;
+import com.upgrad.productapp.entities.EshopOrder;
 import com.upgrad.productapp.entities.EshopProduct;
 import com.upgrad.productapp.entities.EshopShippingAddress;
 import com.upgrad.productapp.entities.EshopUser;
 import com.upgrad.productapp.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
 
 @Component
 public class EntityDTOConverter {
@@ -69,6 +69,18 @@ public class EntityDTOConverter {
        productDto.setCreated(product.getCreated());
        productDto.setUpdated(product.getUpdated());
         return productDto;
+    }
+
+
+    public EshopOrderResponseDto convertToResponseDto(EshopOrder order){
+        EshopOrderResponseDto orderDto= new EshopOrderResponseDto();
+        orderDto.setAmount(order.getEshopProduct().getPrice());
+        orderDto.setOrderDate(LocalDateTime.now());
+        orderDto.setEshopUser(order.getEshopUser());
+        orderDto.setEshopProduct(order.getEshopProduct());
+        orderDto.setEshopShippingAddress(order.getEshopShippingAddress());
+
+        return orderDto;
     }
 
 

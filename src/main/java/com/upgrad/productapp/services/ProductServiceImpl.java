@@ -58,6 +58,14 @@ public class ProductServiceImpl implements ProductService {
         return product;
     }
 
+    public double getProductAmountById(int id) throws ProductDetailsNotFound {
+        EshopProduct product=eshopProductDAO.findById(id).orElseThrow(
+                () -> new ProductDetailsNotFound("Product not found for " + id));
+
+        return product.getPrice();
+    }
+
+
     public List<String> getProductCategories() throws ProductDetailsNotFound {
         List<EshopProduct> eshopProductList=eshopProductDAO.findAll();
         List<String> categories=new ArrayList<String>();

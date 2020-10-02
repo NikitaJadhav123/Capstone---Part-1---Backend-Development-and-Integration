@@ -14,5 +14,6 @@ public interface EshopUserDAO extends JpaRepository<EshopUser,Integer> {
     Optional<EshopUser> findById(int id);
     Optional<EshopUser> findByPassword(String password);
     Optional<EshopUser> findByUserName(String usernm);
+
   //  Optional<Users> findByEmailIdandPassword(String emailId,String password);
 }

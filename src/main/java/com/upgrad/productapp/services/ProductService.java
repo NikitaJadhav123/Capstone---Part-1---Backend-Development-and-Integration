@@ -18,4 +18,7 @@ public interface ProductService {
 
     public EshopProduct getProductDetailsById(int id) throws ProductDetailsNotFound;
 
+
+    public double getProductAmountById(int id) throws ProductDetailsNotFound ;
+
 }

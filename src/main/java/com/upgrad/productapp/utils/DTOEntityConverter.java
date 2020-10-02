@@ -1,17 +1,35 @@
 package com.upgrad.productapp.utils;
 
+import com.upgrad.productapp.dtos.EshopOrderDto;
 import com.upgrad.productapp.dtos.EshopProductDto;
 import com.upgrad.productapp.dtos.EshopShippingAddressDto;
 import com.upgrad.productapp.dtos.EshopUserDto;
+import com.upgrad.productapp.entities.EshopOrder;
 import com.upgrad.productapp.entities.EshopProduct;
 import com.upgrad.productapp.entities.EshopShippingAddress;
 import com.upgrad.productapp.entities.EshopUser;
+import com.upgrad.productapp.exceptions.AddressNotFound;
+import com.upgrad.productapp.exceptions.ProductDetailsNotFound;
+import com.upgrad.productapp.services.AddressService;
+import com.upgrad.productapp.services.ProductService;
+import com.upgrad.productapp.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
 @Component
 public class DTOEntityConverter {
+
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    ProductService productService;
+
+    @Autowired
+    AddressService addressService;
 
 
     public EshopUser convertToUserEntity(EshopUserDto userDto) {
@@ -56,6 +74,16 @@ public class DTOEntityConverter {
 
 
         return productData;
+    }
+
+    public EshopOrder convertToOrderEntity(EshopOrderDto orderDto) throws ProductDetailsNotFound, AddressNotFound {
+        EshopOrder orderData= new EshopOrder();
+        orderData.setEshopProduct(productService.getProductDetailsById((orderDto.getProductId())));
+        orderData.setEshopShippingAddress(addressService.getAddressDetailsById(orderDto.getAddressId()));
+        orderData.setAmount(productService.getProductAmountById(orderDto.getProductId()));
+        orderData.setOrderDate(LocalDateTime.now());
+
+        return orderData;
     }
 
 

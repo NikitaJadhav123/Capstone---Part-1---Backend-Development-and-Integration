@@ -1,8 +1,10 @@
 package com.upgrad.productapp.services;
 
 import com.upgrad.productapp.daos.EshopProductDAO;
+import com.upgrad.productapp.daos.EshopShippingAddressDAO;
 import com.upgrad.productapp.daos.EshopUserDAO;
 import com.upgrad.productapp.entities.EshopProduct;
+import com.upgrad.productapp.entities.EshopShippingAddress;
 import com.upgrad.productapp.entities.EshopUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,7 +24,9 @@ public class initServiceImpl implements InitService {
 
     EshopUser users = new EshopUser(LocalDateTime.now(), "admin@upgrad.com", "admin", "admin", "password", "1234567890", "ADMIN", LocalDateTime.now(), "admin");
 
-    List<EshopUser> usersDataList=Arrays.asList( users);
+    EshopUser users1 = new EshopUser(LocalDateTime.now(), "xyz@upgrad.com", "nitin", "nitin", "password", "1234567896", "USER", LocalDateTime.now(), "nitin");
+
+    List<EshopUser> usersDataList=Arrays.asList( users,users1);
 
 
 
@@ -32,6 +36,10 @@ public class initServiceImpl implements InitService {
 
     List<EshopProduct> productList=Arrays.asList( product,product1);
 
+
+    EshopShippingAddress address=new EshopShippingAddress("Mumbai","near temple","ShoppingCart","1234567890","MAHARASHTRA","SV road","400054",users1);
+
+    List<EshopShippingAddress> addressList=Arrays.asList(address);
 
 
     @Qualifier("eshopUserDAO")
@@ -43,6 +51,10 @@ public class initServiceImpl implements InitService {
     @Autowired
     private EshopProductDAO eshopProductDAO;
 
+    @Qualifier("eshopShippingDAO")
+    @Autowired
+    private EshopShippingAddressDAO addressDAO;
+
 
 
 
@@ -52,6 +64,8 @@ public class initServiceImpl implements InitService {
         usersDataList.forEach(usersData -> usersDAO.save(usersData));
 
         productList.forEach( productData -> eshopProductDAO.save(productData));
+
+        addressList.forEach( addressdata -> addressDAO.save(addressdata));
 
     }
 
