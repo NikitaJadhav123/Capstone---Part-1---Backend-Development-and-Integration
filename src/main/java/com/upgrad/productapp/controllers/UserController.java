@@ -46,7 +46,7 @@ public class UserController {
             if(usernm == null)
                 throw new APIException("Please Login first to access this endpoint!");
 
-        EshopUser customere = userService.getCustomerDetailsByUserName(usernm);
+        EshopUser customere = userService.getCustomerInoByUserName(usernm);
         EshopUserDto savedCustomerDTO = entityDTOConverter.convertToUserDTO(customere);
             return ResponseEntity.status(HttpStatus.OK).body(savedCustomerDTO);
 

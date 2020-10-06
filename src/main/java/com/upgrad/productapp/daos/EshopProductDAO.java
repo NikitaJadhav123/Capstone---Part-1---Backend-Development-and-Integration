@@ -12,8 +12,10 @@ import java.util.Optional;
 public interface EshopProductDAO  extends JpaRepository<EshopProduct,Integer> {
 
 
+  //  Optional<EshopProduct> findByCategory(String category);
 
-    Optional<EshopProduct> findByCategory(String category);
+
+   List<EshopProduct> findByCategory(String category);
 
     List<EshopProduct> findAll();
 

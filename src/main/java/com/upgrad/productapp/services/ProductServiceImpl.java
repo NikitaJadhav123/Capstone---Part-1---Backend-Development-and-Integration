@@ -35,6 +35,7 @@ public class ProductServiceImpl implements ProductService {
          eshopProductDAO.delete(product);
     }
 
+    /*
     public EshopProduct getProductDetailsByGet(String category,String name) throws ProductDetailsNotFound {
         EshopProduct product=new EshopProduct();
         if(category!=null) {
@@ -50,10 +51,24 @@ public class ProductServiceImpl implements ProductService {
 
         return product;
     }
+*/
+    public List<EshopProduct> getProductDetails() {
+       List<EshopProduct> product=eshopProductDAO.findAll();
+
+
+        return product;
+    }
 
     public EshopProduct getProductDetailsById(int id) throws ProductDetailsNotFound {
         EshopProduct product=eshopProductDAO.findById(id).orElseThrow(
                     () -> new ProductDetailsNotFound("Product not found for " + id));
+
+        return product;
+    }
+
+
+    public List<EshopProduct> getProductDetailsByCategory(String category) throws ProductDetailsNotFound  {
+        List<EshopProduct> product=eshopProductDAO.findByCategory(category);
 
         return product;
     }

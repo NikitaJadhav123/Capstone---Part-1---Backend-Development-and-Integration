@@ -68,7 +68,7 @@ public class OrderController {
             throw new APIException("Please Login first to access this endpoint!");
 
 
-        EshopUser customere = userService.getCustomerDetailsByUserName(usernm);
+        EshopUser customere = userService.getCustomerInoByUserName(usernm);
         if(!customere.getRole().equalsIgnoreCase("user")){
             throw new CustomException("You are not authorised to access this endpoint.");
         }

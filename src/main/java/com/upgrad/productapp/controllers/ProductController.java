@@ -1,5 +1,6 @@
 package com.upgrad.productapp.controllers;
 
+import com.upgrad.productapp.daos.EshopProductDAO;
 import com.upgrad.productapp.dtos.EshopProductDto;
 import com.upgrad.productapp.entities.EshopProduct;
 import com.upgrad.productapp.entities.EshopUser;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@CrossOrigin
 @Controller
 public class ProductController {
 
@@ -29,6 +31,9 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+
+    @Autowired
+    EshopProductDAO productDAO;
     @Autowired
     UserService userService;
     @Autowired
@@ -49,7 +54,7 @@ public class ProductController {
             throw new APIException("Please Login first to access this endpoint!");
 
 
-        EshopUser customere = userService.getCustomerDetailsByUserName(usernm);
+        EshopUser customere = userService.getCustomerInoByUserName(usernm);
         if(!customere.getRole().equalsIgnoreCase("admin")){
             throw new CustomException("You are not authorised to access this endpoint.");
         }
@@ -66,24 +71,69 @@ public class ProductController {
 
     }
 
+    /*
     @GetMapping( value = "/products")
     @ResponseBody
-    public ResponseEntity getUserDetails( @RequestParam (value="Category") String category,
-                                          @RequestParam (value="Direction") String direction,
-                                          @RequestParam (value="Name") String name,
-                                          @RequestParam (value="Page Number")  int pgno,
-                                          @RequestParam (value="Page Size") int pgsz,
-                                          @RequestParam (value="Sort By") String sortBy) throws ProductDetailsNotFound {
+    public ResponseEntity getDetails( @RequestParam (value="category") String category,
+                                          @RequestParam (value="direction") boolean desc,
+                                          @RequestParam (value="name") String name,
+                                          @RequestParam (value="pageNo")  int pgno,
+                                          @RequestParam (value="pageSize") int pgsz,
+                                          @RequestParam (value="productId") int SortBy)  {
 
 
-        EshopProduct eshopProduct=productService.getProductDetailsByGet(category,name);
+        Page<EshopProduct> productPage = null;
+
+        // not filtering with salary
+        if(category==null || name==null) {
+            // not sorting with age
+                // sorting with age and ascending
+                if(!desc) {
+                    Pageable requestedPage = PageRequest.of(pgno, pgsz, Sort.by("productId"));
+                    productPage  = productDAO.findAll(requestedPage);
+                }
+                // sorting with age and descending
+                else {
+                    Pageable requestedPage = PageRequest.of(pgno, pgsz,
+                            Sort.by("productId").descending());
+                    productPage  = productDAO.findAll(requestedPage);
+                }
+            }
+        /*
+            // Filtering with salary
+        } else {
+            // not sorting with age
+            if(agesorting == false) {
+                Pageable requestedPage = PageRequest.of(page, size);
+                // fitering request
+                customers = customerRepository.findAllBySalary(salary, requestedPage);
+            }else {
+                // sorting with age and ascending
+                if(false == desc) {
+                    Pageable requestedPage = PageRequest.of(page, size, Sort.by("age"));
+                    // filtering request
+                    customers  = customerRepository.findAllBySalary(salary, requestedPage);
+                }
+                // sorting with age and descending
+                else {
+                    Pageable requestedPage = PageRequest.of(page, size,
+                            Sort.by("age").descending());
+                    // filtering request
+                    customers  = customerRepository.findAllBySalary(salary, requestedPage);
+                }
+            }
+        }
+
+
+
+
+        EshopProduct eshopProduct= (EshopProduct) productPage;
         EshopProductDto savedProductDTO=entityDTOConverter.convertToProductDto(eshopProduct);
         return ResponseEntity.status(HttpStatus.OK).body(savedProductDTO);
 
 
-
     }
-
+*/
     @GetMapping( value = "/products/{id}")
     @ResponseBody
     public ResponseEntity getProductDetailsById( @PathVariable Integer id ) throws ProductDetailsNotFound {
@@ -100,6 +150,27 @@ public class ProductController {
 
     }
 
+    @GetMapping( value = "/products/category/{category}")
+    @ResponseBody
+    public ResponseEntity getProductDetailsByCategory( @PathVariable String category ) throws ProductDetailsNotFound {
+
+        List<EshopProduct> eshopProduct=productService.getProductDetailsByCategory(category);
+        if (eshopProduct==null) {
+            CustomResponse response = new CustomResponse(LocalDateTime.now(), "No Product found for category- "+category+"!", 400);
+            return  new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+
+        }
+       // List<EshopProductDto> savedProductDTO=new ArrayList<>();
+       // for(EshopProduct p:eshopProduct) {
+       //         savedProductDTO.add(entityDTOConverter.convertToProductDto(p));
+
+       // }
+
+        return ResponseEntity.status(HttpStatus.OK).body(eshopProduct);
+
+
+    }
+
     @PutMapping( value = "/products/{id}")
     @ResponseBody
     public ResponseEntity updateProductDetailsById( @PathVariable int id,@RequestBody EshopProductDto productDto, @RequestHeader(value = "X-ACCESS-TOKEN")  String accessToken  ) throws ProductDetailsNotFound, APIException, UserDetailsNotfoundException, CustomException {
@@ -110,7 +181,7 @@ public class ProductController {
             throw new APIException("Please Login first to access this endpoint!");
 
 
-        EshopUser customere = userService.getCustomerDetailsByUserName(usernm);
+        EshopUser customere = userService.getCustomerInoByUserName(usernm);
         if(!customere.getRole().equalsIgnoreCase("admin")){
             throw new CustomException("You are not authorised to access this endpoint.");
         }
@@ -162,7 +233,7 @@ public class ProductController {
             throw new APIException("Please Login first to access this endpoint!");
 
 
-        EshopUser customere = userService.getCustomerDetailsByUserName(usernm);
+        EshopUser customere = userService.getCustomerInoByUserName(usernm);
         if(!customere.getRole().equalsIgnoreCase("admin")){
             throw new CustomException("You are not authorised to access this endpoint.");
         }
@@ -192,9 +263,19 @@ public class ProductController {
 
     }
 
+    @GetMapping( value = "/products")
+    @ResponseBody
+    public ResponseEntity getProducts() {
+
+        List<EshopProduct> products = productService.getProductDetails();
+
+        return ResponseEntity.status(HttpStatus.OK).body(products);
+
+
+    }
 
 
 
 
 
-}
+    }

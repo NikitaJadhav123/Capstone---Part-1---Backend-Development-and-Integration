@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service("UserService")
 public class UserServiceImpl implements UserService {
@@ -57,10 +58,12 @@ public class UserServiceImpl implements UserService {
         return usersDAO.findByEmail(emailid).get();
     }
 
-    public EshopUser getCustomerDetailsByEmail(String email) throws UserDetailsNotfoundException {
-        EshopUser customer = usersDAO.findByEmail(email).orElseThrow(
-                ()->  new UserDetailsNotfoundException("User not found for email" + email));
-        return customer;
+    public boolean getCustomerDetailsByEmail(String email) throws UserAlreadyExistsException{
+        Optional<EshopUser> customer = usersDAO.findByEmail(email);
+        if(customer.isPresent()){
+            throw new UserAlreadyExistsException("Email exist");
+        }
+        return false;
     }
 
     public EshopUser getCustomerDetailsById(int id) throws UserDetailsNotfoundException {
@@ -69,10 +72,29 @@ public class UserServiceImpl implements UserService {
         return customer;
     }
 
-   public EshopUser getCustomerDetailsByUserName(String un) throws UserDetailsNotfoundException {
+   public boolean getCustomerDetailsByUserName(String un) throws UserAlreadyExistsException {
+        Optional<EshopUser> customer = usersDAO.findByUserName(un);
+        if(customer.isPresent()){
+            throw new UserAlreadyExistsException("Username exist");
+        }
+
+        return false;
+    }
+
+    public boolean getCustomerByUserName(String un) throws UserDetailsNotfoundException {
+        Optional<EshopUser> customer = usersDAO.findByUserName(un);
+        if(customer.isEmpty()){
+            throw new UserDetailsNotfoundException("Username not exist");
+        }
+
+        return false;
+    }
+    public EshopUser getCustomerInoByUserName(String un) throws UserDetailsNotfoundException {
         EshopUser customer = usersDAO.findByUserName(un).orElseThrow(
-                ()->  new UserDetailsNotfoundException("User not found for " + un));
+                ()->  new UserDetailsNotfoundException("User not found for username" + un));
         return customer;
+
+
     }
 
 
